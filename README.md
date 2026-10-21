@@ -1,2 +1,158 @@
-# stum-3D
+# stum-3D (readme.md)
 upload stl and usdz files into the respective folders. password: stum-4K7b2r. link: [https://worldo8479.github.io/stum-3D/](https://worldo8479.github.io/stum-3D/)
+
+# instructions (setup.txt)
+Model archive — GitHub Pages model library
+
+1. UPLOAD
+Replace your existing index.html with the supplied file. Place it beside the
+model folders in your GitHub Pages publishing source:
+
+  index.html
+  stl/
+    Bracket.stl
+  usdz/
+    Chair.usdz
+    Chair.glb       (optional browser-preview companion)
+  files.json       (optional fallback listing)
+
+Folder names must be lowercase stl and usdz. Filenames are case-sensitive.
+Only files directly inside these folders are listed; subfolders are not traversed.
+No build step or npm installation is needed. Internet access is needed for the
+3D libraries loaded from jsDelivr. This is not an offline application.
+
+2. CONFIGURE
+Near the bottom of index.html, find:
+
+  const CONFIG = { owner: '', repo: '', branch: '', root: '' };
+
+For a predictable setup for every visitor, fill it in, for example:
+
+  const CONFIG = {
+    owner: 'YOUR-GITHUB-USERNAME',
+    repo: 'YOUR-REPOSITORY',
+    branch: 'main',
+    root: ''
+  };
+
+root is the repository folder containing the model folders and index.html.
+If publishing from /docs, use root: 'docs' and place ALL the files above in docs/.
+Use the actual source branch; an empty branch uses the repository default,
+which may differ from the GitHub Pages publishing branch.
+
+Standard username.github.io/repository/ addresses infer owner/repo when blank.
+Custom domains need CONFIG or the optional files.json manifest. The Repository
+button lets you change settings for this browser; saved browser settings take
+precedence over CONFIG. Use that button to correct old settings after an edit.
+
+Model URLs always resolve beside the deployed index.html. Changing Repository
+settings changes the API listing, not where the model files are served. The
+chosen repository, branch and folder must match the deployed files.
+
+3. ENABLE GITHUB PAGES
+Open the repository's Settings > Pages. Under Build and deployment, choose
+Deploy from a branch, choose the source branch, then /(root) or /docs to match
+where you uploaded index.html. Save and wait for deployment to finish. Open
+the published site URL shown by GitHub, rather than the GitHub file preview.
+An empty .nojekyll file in the publishing folder is optional for this static site.
+
+GitHub's instructions:
+https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+
+4. PASSWORD
+Enter exactly: stum-4K7b2r
+Successful access is remembered in localStorage for this browser and site path.
+Other browsers, private browsing, cleared storage and a changed domain/path
+can require it again. Lock clears remembered access. If browser storage is
+blocked, access works for the current page but may not persist on reload.
+
+IMPORTANT: this is NOT real authentication. The password is readable in the
+HTML, the gate can be bypassed, and direct file URLs remain public. It does not
+protect sensitive files or grant access to a private repository. Do not embed
+GitHub tokens. Use authenticated hosting for confidential models.
+
+5. PREVIEWS
+STL: interactive Three.js preview with STLLoader and OrbitControls. Drag to
+orbit, scroll or pinch to zoom, right-drag to pan; Reset view recenters the
+model. ASCII and binary STL are supported. Large models can be slow or exceed
+the device's memory. The viewer normalizes display scale without changing files.
+
+USDZ: Apple Quick Look opens the original file on supported Apple devices,
+including supported Safari configurations. It is not an embedded cross-platform
+USDZ renderer. On other devices use Open / save and a compatible application.
+Native Quick Look support varies by device/browser.
+
+For an interactive browser preview, add a same-basename .glb companion, for
+example usdz/Chair.usdz and usdz/Chair.glb. GitHub API listing detects that pair
+(case-sensitive basename and lowercase .glb extension). model-viewer displays
+the GLB, while Apple Quick Look opens the original USDZ. The HTML does not
+convert USDZ into GLB. Export a companion GLB with your modeling software.
+
+Reference: https://modelviewer.dev/docs/index.html
+STL loader: https://threejs.org/docs/pages/STLLoader.html
+Controls: https://threejs.org/docs/pages/OrbitControls.html
+
+6. FALLBACK WHEN THE GITHUB API IS UNAVAILABLE
+The unauthenticated GitHub API can be rate-limited or inaccessible. For each
+folder the viewer tries the API, then a local files.json manifest, then a saved
+successful API listing. A notice identifies fallback data. Saved listings may
+be stale; they do not store the model files. Refresh retries the API.
+
+Create files.json beside index.html with your actual filenames, for example:
+
+  {
+    "stl": [
+      "Bracket.stl",
+      { "name": "Housing.stl", "size": 102400 }
+    ],
+    "usdz": [
+      { "name": "Chair.usdz", "glb": "Chair.glb", "size": 524288 }
+    ]
+  }
+
+size is optional and is in bytes. glb is optional and names a file within usdz/.
+Use [] for an empty folder. Keep this JSON up to date as you add/remove files.
+Only filenames are accepted, not URLs or paths. A manifest-only setup works
+with blank repository settings on a custom domain or local HTTP server.
+The Contents API has a 1,000-entry folder limit; the viewer uses fallback when
+that limit is reached. See:
+https://docs.github.com/en/rest/repos/contents
+
+7. TROUBLESHOOTING
+- Empty list: check folder names, source branch/root, public API access and the
+  fallback manifest. GitHub does not preserve entirely empty folders.
+- Listed file fails to load: confirm its URL exists on the published Pages site.
+  Deployments can lag behind API listings. A Git LFS pointer is not a model;
+  ensure the actual model bytes are included in the deployed site.
+- Preview unavailable: enable WebGL, use a modern browser, allow jsDelivr, and
+  verify the STL or GLB file is valid. Open / save remains available.
+- Open / save opens a file instead of downloading: use the browser's Save action.
+- Local preview: serve this folder over HTTP (for example python3 -m http.server
+  8000), then open http://localhost:8000/. Do not rely on double-click/file://.
+- Model files are never uploaded by this viewer. It requests repository listings
+  from GitHub, model files from your Pages site and libraries from jsDelivr.
+
+VALIDATION
+Checked in headless Chromium with fixture listings/models: password handling,
+remembered login, lock, file selection, responsive width, API/cache/manifest
+fallbacks, and model-viewer rendering of a companion model.
+Actual repository deployment and native Apple Quick Look must be checked on
+your own published URL/device, since no repository or USDZ asset was supplied.
+
+UPDATED ARCHIVE DESIGN
+The layout keeps the dark green palette with a compact file index, larger model
+preview, plain-language copy and a neutral clay material for STL models.
+The last selected model is remembered per repository configuration and restored
+after unlocking. Selecting a model on mobile scrolls the preview into view;
+the scrolling respects the device's reduced-motion preference.
+
+Optional real notes: edit MODEL_NOTES in index.html, for example:
+
+  const MODEL_NOTES = {
+    'stl/Bracket.stl': 'Replace this with your actual model notes.'
+  };
+
+Notes appear beneath the preview only for entries you supply. Use exact,
+case-sensitive folder/filename keys. Leave the object empty to show no notes.
+The original password, GitHub listing, manifest/cache fallback, downloads,
+STL controls and USDZ/GLB preview paths are unchanged.
